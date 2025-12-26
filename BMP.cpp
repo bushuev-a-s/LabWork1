@@ -4,6 +4,7 @@
  * Lab work 1
  */
 
+#include <exception>
 #include "BMP.h"
 #include <string>
 #include <fstream>

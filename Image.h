@@ -4,6 +4,7 @@
  * Lab work 1
  */
 
+#include <exception>
 #include <string>
 
 #ifndef IMAGE_H

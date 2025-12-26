@@ -4,6 +4,7 @@
  * Lab work 1
  */
 
+#include <exception>
 #include <cstdint>
 
 #ifndef BMP_HEADER

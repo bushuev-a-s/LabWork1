@@ -1,7 +1,7 @@
 PROJECT = bmp
 CXX = g++
-CXXFLAGS = -Wall -Wextra -pedantic
-SRC = BMP.cpp
+CXXFLAGS = -Wall -Wextra -pedantic -fpermissive
+SRC = main.cpp BMP.cpp
 OBJ = $(SRC:.cpp=.o)
 
 all: $(PROJECT)

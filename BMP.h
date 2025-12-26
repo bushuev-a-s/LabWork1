@@ -4,12 +4,12 @@
  * Lab work 1
  */
 
+#include <exception>
 #include "Image.h"
 #include "BMPheader.h"
 //#include "Pixel.h"
 #include <string>
 #include <vector>
-//#include <cstdint>
 
 #ifndef BMP_H
 #define BMP_H
@@ -28,5 +28,5 @@ private:
     FileHeader _fileheader;
     InfoHeader _infoheader;
     std::vector<uint8_t> _pixels;
-}
+};
 #endif
