@@ -1,7 +1,7 @@
 PROJECT = bmp
 CXX = g++
-CXXFLAGS = -Wall -Wextra -pedantic -fpermissive
-SRC = main.cpp BMP.cpp
+CXXFLAGS =-std=c++17 -Wall -Wextra -pedantic -fpermissive
+SRC = main.cpp BMP.cpp BMPheader.cpp
 OBJ = $(SRC:.cpp=.o)
 
 all: $(PROJECT)
@@ -13,6 +13,6 @@ $(PROJECT): $(OBJ)
 	$(CXX) -c $< -o $@ $(CXXFLAGS)
 
 clean:
-	rm -f $(OBJ) $(PROJECT)
+	rm -f gaussian_blurred.bmp  rotated_ccw.bmp rotated_cw.bmp $(OBJ) $(PROJECT)
 
 .PHONY: all clean
