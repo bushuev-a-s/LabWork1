@@ -5,22 +5,24 @@
  */
 
 #include "BMP.h"
+#include <string>
+#include <fstream>
 #include <vector>
 #include <utility>
 
-void Bmp::load(const std::string& filename) {
+void Bmp::load(const std::string &filename) {
     std::ifstream file(filename, std::ios::binary);
     file.read(reinterpret_cast<char*>(&_fileheader), sizeof(_fileheader));
     file.read(reinterpret_cast<char*>(&_infoheader), sizeof(_infoheader));
 
     int rowLength = (_infoheader.biWidth * _infoheader.biBitCount / 8 + 3) & ~3;
     int totalSize = rowLength * abs(_infoheader.biHeight);
-    pixels.resize(totalSize);
-    file.seekg(fileHeader.bfOffBits);
-    file.read(reinterpret_cast<char*>(pixels.data()), totalSize);
+    _pixels.resize(totalSize);
+    file.seekg(_fileheader.bfOffBits);
+    file.read(reinterpret_cast<char*>(_pixels.data()), totalSize);
 }
 
-void Bmp::save(const std::string& filename) const {
+void Bmp::save(const std::string &filename) {
     std::ofstream file(filename, std::ios::binary);
     file.write(reinterpret_cast<const char*>(&_fileheader), sizeof(_fileheader));
     file.write(reinterpret_cast<const char*>(&_infoheader), sizeof(_infoheader));
@@ -28,9 +30,9 @@ void Bmp::save(const std::string& filename) const {
     int rowLength = (_infoheader.biWidth * 3 + 3) & ~3;
     int paddingSize = rowLength - _infoheader.biWidth * 3;
     for (int y = 0; y < abs(_infoheader.biHeight); ++y) {
-        file.write(reinterpret_cast<const char*>(pixels.data() + y * _infoheader.biWidth), _infoheader.biWidth * 3);
-        char padding[paddingSize]{};
-        file.write(padding, paddingSize);
+        file.write(reinterpret_cast<const char*>(_pixels.data() + y * _infoheader.biWidth), _infoheader.biWidth * 3);
+        std::vector<char> padding(paddingSize);
+        file.write(padding.data(), paddingSize);
     }
 }
 
@@ -77,24 +79,24 @@ void Bmp::rotateLeft() {
 void Bmp::applyGaussianFilter() {
     std::vector<uint8_t> temp(_pixels.size());
     float kernel[3][3] = {{0.0625, 0.125, 0.0625}, {0.125, 0.25, 0.125}, {0.0625, 0.125, 0.0625}};
-    for (int y = 1; y < height - 1; ++y) {
-        for (int x = 1; x < width - 1; ++x) {
+    for (int y = 1; y < _infoheader.biHeight - 1; ++y) {
+        for (int x = 1; x < _infoheader.biWidth - 1; ++x) {
             float sumR = 0, sumG = 0, sumB = 0;
             for (int ky = -1; ky <= 1; ++ky) {
                 for (int kx = -1; kx <= 1; ++kx) {
                     int nx = x + kx;
                     int ny = y + ky;
-                    int index = (ny * width + nx) * 3; // RGB
+                    int index = (ny * _infoheader.biWidth + nx) * 3;
 
-                    sumR += pixels[index] * kernel[ky + 1][kx + 1];
-                    sumG += pixels[index + 1] * kernel[ky + 1][kx + 1];
-                    sumB += pixels[index + 2] * kernel[ky + 1][kx + 1];
+                    sumR += _pixels[index] * kernel[ky + 1][kx + 1];
+                    sumG += _pixels[index + 1] * kernel[ky + 1][kx + 1];
+                    sumB += _pixels[index + 2] * kernel[ky + 1][kx + 1];
                 }
             }
-            int idx = (y * width + x) * 3;
-            filteredPixels[idx] = static_cast<uint8_t>(sumR);
-            filteredPixels[idx + 1] = static_cast<uint8_t>(sumG);
-            filteredPixels[idx + 2] = static_cast<uint8_t>(sumB);
+            int idx = (y * _infoheader.biWidth + x) * 3;
+            temp[idx] = static_cast<uint8_t>(sumR);
+            temp[idx + 1] = static_cast<uint8_t>(sumG);
+            temp[idx + 2] = static_cast<uint8_t>(sumB);
         }
     }
     std::swap(_pixels,temp);

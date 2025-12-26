@@ -4,9 +4,12 @@
  * Lab work 1
  */
 
+#include "Image.h"
 #include "BMPheader.h"
 //#include "Pixel.h"
+#include <string>
 #include <vector>
+//#include <cstdint>
 
 #ifndef BMP_H
 #define BMP_H

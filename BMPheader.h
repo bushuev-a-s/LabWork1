@@ -4,6 +4,8 @@
  * Lab work 1
  */
 
+#include <cstdint>
+
 #ifndef BMP_HEADER
 #define BMP_HEADER
 #pragma pack(push, 1)
