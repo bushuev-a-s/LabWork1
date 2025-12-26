@@ -5,7 +5,7 @@
  */
 
 #include "BMPheader.h"
-#include "Pixel.h"
+//#include "Pixel.h"
 #include <vector>
 
 #ifndef BMP_H
@@ -15,15 +15,15 @@ public:
     Bmp();
     ~Bmp();
 
-    void getMemoryAmount(const std::string &filename) override;
+    //void getMemoryAmount(const std::string &filename) override;
     void load(const std::string &filename) override;
     void save(const std::string &filename) override;
     void rotateRight() override;
     void rotateLeft() override;
-    void applyGaussianFilter(float sigma) override;
+    void applyGaussianFilter() override;
 private:
     FileHeader _fileheader;
     InfoHeader _infoheader;
-    std::vector<Pixel> _pixels;
+    std::vector<uint8_t> _pixels;
 }
 #endif
